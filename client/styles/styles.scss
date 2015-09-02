@@ -1,4 +1,8 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:300);
+$font-stack: 'Open Sans', sans-serif;
+
 body, p, h1, h2, h3, h4, ul, li {
+  font-family: $font-stack;
   padding: 0;
   margin: 0;
 }
