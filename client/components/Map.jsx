@@ -2,8 +2,10 @@ Map = React.createClass({
   render() {
     return (
       <div>
-        <h1>This is where the map goes</h1>
         <Sidenav />
+        <div className="content-wrapper">
+          <Modal />
+        </div>
       </div>
     )
   }
