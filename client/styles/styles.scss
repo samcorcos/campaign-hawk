@@ -57,7 +57,7 @@ body, p, h1, h2, h3, h4, ul, li {
     border: 10px solid;
     border-color: transparent #fff transparent transparent;
     position:absolute;
-    top: 13px;
+    top: 15px;
     left: -20px;
   }
 }
@@ -65,6 +65,7 @@ body, p, h1, h2, h3, h4, ul, li {
 .content-wrapper {
   width: calc(100% - 60px);
   padding-left: 60px;
+  z-index: 0;
 }
 
 .modal-active-darken {
@@ -76,6 +77,7 @@ body, p, h1, h2, h3, h4, ul, li {
   justify-content: center;
   align-items: center;
   .modal-container {
+    pointer-events: all;
     width: 60%;
     min-height: 500px;
     background-color: white;
@@ -83,3 +85,37 @@ body, p, h1, h2, h3, h4, ul, li {
     box-shadow: 5px 8px 10px 0px #565656;
   }
 }
+
+.volunteer-form-row {
+  height: 250px;
+  width: 100%;
+  padding: 10px 20px;
+  .volunteer-form-column-60 {
+    width: 60%;
+    float: left;
+    display: flex;
+    // justify-content: flex-start;
+    align-items: center;
+  }
+  .volunteer-form-column-40 {
+    width: 40%;
+    float: left;
+  }
+  .volunteer-form-column-100 {
+    width: 100%;
+    float: left;
+  }
+}
+//
+// <div className="volunteer-form-row">
+//   <div className="volunteer-form-column-60">
+//
+//   </div>
+//   <div className="volunteer-form-column-40">
+//
+//   </div>
+// </div>
+// <div className="volunteer-form-row">
+//   <div className="volunteer-form-column-100">
+//
+//   </div>
