@@ -1,5 +1,7 @@
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:300);
 $font-stack: 'Open Sans', sans-serif;
+$default-text-color: rgba(107,117,139,1);
+
 
 body, p, h1, h2, h3, h4, ul, li {
   font-family: $font-stack;
@@ -28,5 +30,32 @@ body, p, h1, h2, h3, h4, ul, li {
       font-size: 1.6em;
       justify-content: center;
     }
+  }
+}
+
+.sidenav-tooltip {
+  transition: opacity 0.2s ease;
+  opacity: 0;
+  background-color: #fff;
+  height: 3em;
+  width: 150px;
+  padding-bottom: 4px;
+  margin-left: 30px;
+  position: absolute;
+  box-shadow: 0px 2px 8px 0px #888;
+  display: flex; // maybe start as display none?
+  align-items: center;
+  p {
+    color: $default-text-color;
+    font-size: 1.5em;
+    padding: 10px;
+    align-self: center;
+  }
+  .tail {
+    border: 10px solid;
+    border-color: transparent #fff transparent transparent;
+    position:absolute;
+    top: 13px;
+    left: -20px;
   }
 }
