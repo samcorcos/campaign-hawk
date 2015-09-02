@@ -18,10 +18,10 @@ body, p, h1, h2, h3, h4, ul, li {
   width: 60px;
   height: 100vh;
   .sidenav-list {
-    &:first-child {
+    list-style-type: none;
+    div {
       padding-top: 20px;
     }
-    list-style-type: none;
     .sidenav-list-item {
       cursor: pointer;
       padding: 20px;
@@ -34,23 +34,25 @@ body, p, h1, h2, h3, h4, ul, li {
 }
 
 .sidenav-tooltip {
-  transition: opacity 0.2s ease;
+  transition: opacity 0.3s ease;
   opacity: 0;
   background-color: #fff;
   height: 3em;
-  width: 150px;
   padding-bottom: 4px;
   margin-left: 30px;
   position: absolute;
   box-shadow: 0px 2px 8px 0px #888;
-  display: flex; // maybe start as display none?
+  visibility: hidden;
+  display: flex;
   align-items: center;
-  p {
-    color: $default-text-color;
-    font-size: 1.5em;
-    padding: 10px;
-    align-self: center;
-  }
+  transform: translateY(-50%);
+    p {
+      color: $default-text-color;
+      white-space: nowrap;
+      font-size: 1.5em;
+      padding: 10px;
+      align-self: center;
+    }
   .tail {
     border: 10px solid;
     border-color: transparent #fff transparent transparent;
