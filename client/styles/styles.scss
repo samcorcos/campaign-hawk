@@ -1,4 +1,4 @@
-body, p, h1, h2, h3, h4 {
+body, p, h1, h2, h3, h4, ul, li {
   padding: 0;
   margin: 0;
 }
@@ -11,4 +11,18 @@ body, p, h1, h2, h3, h4 {
   background-color: rgba(250,250,250,1);
   width: 60px;
   height: 100vh;
+  .sidenav-list {
+    &:first-child {
+      padding-top: 20px;
+    }
+    list-style-type: none;
+    .sidenav-list-item {
+      cursor: pointer;
+      padding: 20px;
+      display: flex;
+      opacity: 0.54;
+      font-size: 1.6em;
+      justify-content: center;
+    }
+  }
 }
