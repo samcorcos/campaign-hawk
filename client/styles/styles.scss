@@ -92,7 +92,6 @@ body, p, h1, h2, h3, h4, ul, li {
   padding: 10px 20px;
   display: flex;
   align-items: center;
-  flex-flow: flex-wrap;
   box-sizing: border-box;
   .volunteer-form-column-55 {
     width: 55%;
@@ -100,9 +99,6 @@ body, p, h1, h2, h3, h4, ul, li {
     flex-direction: column;
     padding: 0 20px;
     box-sizing: border-box;
-    input {
-
-    }
   }
   .volunteer-form-column-45 {
     width: 45%;
