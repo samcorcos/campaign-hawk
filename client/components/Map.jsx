@@ -1,3 +1,14 @@
+Meteor.startup(function() {
+  Mapbox.load();
+});
+
+Tracker.autorun(function () {
+	if (Mapbox.loaded()) {
+		L.mapbox.accessToken = Meteor.settings.public.mapbox.accessToken;
+		var map = L.mapbox.map("map", Meteor.settings.public.mapbox.mapId);
+	}
+});
+
 Map = React.createClass({
   getInitialState() {
     return {
@@ -24,6 +35,7 @@ Map = React.createClass({
           <Modal
             showModal={this.state.showModal}
             hideModal={this.hideModal} />
+          <div id="map" className="mapbox"></div>
         </div>
       </div>
     )

@@ -49,6 +49,7 @@ mongo-id@1.0.1-rc.0
 npm-mongo@1.4.39-rc.0_1
 observe-sequence@1.0.7-rc.0
 ordered-dict@1.0.4-rc.0
+pauloborges:mapbox@2.1.5
 promise@0.4.8-rc.0
 random@1.0.4-rc.0
 react@0.1.11
