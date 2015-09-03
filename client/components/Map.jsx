@@ -11,7 +11,7 @@ Map = React.createClass({
       showModal: modalType
     })
   },
-  hideModal() {
+  hideModal(e) {
     this.setState({
       showModal: false
     })
@@ -21,7 +21,9 @@ Map = React.createClass({
       <div>
         <Sidenav showModal={this.showModal} />
         <div className="content-wrapper">
-          <Modal showModal={this.state.showModal} />
+          <Modal
+            showModal={this.state.showModal}
+            hideModal={this.hideModal} />
         </div>
       </div>
     )

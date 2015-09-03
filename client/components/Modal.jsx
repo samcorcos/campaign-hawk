@@ -1,17 +1,19 @@
 Modal = React.createClass({
   render() {
     let modalStyle = {
-      visibility: "hidden"
+      visibility: "hidden",
+      opacity: "0"
     }
     if (!!this.props.showModal) {
       modalStyle.visibility =  "visible"
+      modalStyle.opacity = "1"
     }
     return (
       <div className="modal-active-darken" style={modalStyle}>
         <div className="modal-container">
           {(() => {
             switch (this.props.showModal) {
-              case "Add Volunteer": return <AddVolunteerModalContent />;
+              case "Add Volunteer": return <AddVolunteerModalContent hideModal={this.props.hideModal}/>;
               case "View Volunteers": return <h1>view volunteers</h1>;
               default: return false;
             }
@@ -38,7 +40,7 @@ AddVolunteerModalContent = React.createClass({
               <img src="https://goo.gl/PoNcsv" />
             </div>
             <button className="button-flat">Upload Photo</button>
-            <div className="close-modal-x">&times;</div>
+            <div className="close-modal-x" onClick={this.props.hideModal}>&times;</div>
           </div>
         </div>
         <div className="volunteer-form-row">
@@ -47,8 +49,8 @@ AddVolunteerModalContent = React.createClass({
           </div>
         </div>
         <div className="submit-modal-buttons">
-          <button className="button">Submit</button>
-          <button className="button-flat">Discard</button>
+          <button onClick={this.props.hideModal} className="button">Submit</button>
+          <button onClick={this.props.hideModal} className="button-flat">Discard</button>
         </div>
       </div>
     )
