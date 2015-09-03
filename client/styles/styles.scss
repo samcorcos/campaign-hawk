@@ -87,7 +87,7 @@ body, p, h1, h2, h3, h4, ul, li {
 }
 
 .volunteer-form-row {
-  height: 250px;
+  height: 225px;
   width: 100%;
   padding: 10px 20px;
   display: flex;
@@ -107,7 +107,7 @@ body, p, h1, h2, h3, h4, ul, li {
   .volunteer-form-column-45 {
     width: 45%;
     position: relative;
-    height: 250px;
+    height: 225px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -132,7 +132,7 @@ body, p, h1, h2, h3, h4, ul, li {
     justify-content: center;
     box-sizing: border-box;
     align-self: center;
-    height: 200px;
+    height: 150px;
     textarea {
       background-color: white;
       width: 93%;
@@ -144,6 +144,18 @@ body, p, h1, h2, h3, h4, ul, li {
         padding: 8px;
       }
     }
+  }
+}
+.submit-modal-buttons {
+  padding: 0 20px;
+  transform: translateY(-15px);
+  display: flex;
+  flex-direction: row-reverse;
+  button {
+    &:first-child {
+      margin-right: 15px;
+    }
+    margin: 0 5px;
   }
 }
 
@@ -191,14 +203,14 @@ input {
 .button {
   text-decoration:none;
   color: white;
-  background-color: blue;
+  background-color: $default-text-color;
   text-align: center;
   letter-spacing: .5px;
-  transition: all 0.2 ease;
+  transition: all 0.2s ease;
   cursor: pointer;
   &:hover {
-    background-color: lighten(blue, 5%);
-    box-shadow: 3px 3px 3px 0px #888;
+    background-color: lighten($default-text-color, 5%);
+    box-shadow: 2px 2px 2px 0px #888;
   }
 }
 

@@ -20,7 +20,7 @@ AddVolunteerModalContent = React.createClass({
             <input type="text" placeholder="First name" />
             <input type="text" placeholder="Last name" />
             <input type="email" placeholder="Email" />
-            <input type="text" placeholder="First name" />
+            <input type="text" placeholder="Phone" />
           </div>
           <div className="volunteer-form-column-45">
             <div className="profile-image-wrapper">
@@ -34,6 +34,10 @@ AddVolunteerModalContent = React.createClass({
           <div className="volunteer-form-column-100">
             <textarea placeholder="Additional notes" />
           </div>
+        </div>
+        <div className="submit-modal-buttons">
+          <button className="button">Submit</button>
+          <button className="button-flat">Discard</button>
         </div>
       </div>
     )
