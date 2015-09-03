@@ -24,7 +24,7 @@ AddVolunteerModalContent = React.createClass({
           </div>
           <div className="volunteer-form-column-45">
             <div className="profile-image-wrapper">
-              <img className="volunteer-profile-image" src="https://media.giphy.com/media/ToMjGpnXBTw7vnokxhu/giphy.gif" />
+              <img src="https://goo.gl/PoNcsv" />
             </div>
             <button className="button-flat">Upload Photo</button>
             <div className="close-modal-x">&times;</div>
