@@ -16,16 +16,23 @@ AddVolunteerModalContent = React.createClass({
     return (
       <div>
         <div className="volunteer-form-row">
-          <div className="volunteer-form-column-60">
-
+          <div className="volunteer-form-column-55">
+            <input type="text" placeholder="First name" />
+            <input type="text" placeholder="Last name" />
+            <input type="email" placeholder="Email" />
+            <input type="text" placeholder="First name" />
           </div>
-          <div className="volunteer-form-column-40">
-
+          <div className="volunteer-form-column-45">
+            <div className="profile-image-wrapper">
+              <img className="volunteer-profile-image" src="https://media.giphy.com/media/ToMjGpnXBTw7vnokxhu/giphy.gif" />
+            </div>
+            <button className="button-flat">Upload Photo</button>
+            <div className="close-modal-x">&times;</div>
           </div>
         </div>
         <div className="volunteer-form-row">
           <div className="volunteer-form-column-100">
-
+            <textarea placeholder="Additional notes" />
           </div>
         </div>
       </div>

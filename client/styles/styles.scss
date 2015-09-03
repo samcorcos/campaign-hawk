@@ -90,32 +90,127 @@ body, p, h1, h2, h3, h4, ul, li {
   height: 250px;
   width: 100%;
   padding: 10px 20px;
-  .volunteer-form-column-60 {
-    width: 60%;
-    float: left;
+  display: flex;
+  align-items: center;
+  flex-flow: flex-wrap;
+  box-sizing: border-box;
+  .volunteer-form-column-55 {
+    width: 55%;
     display: flex;
-    // justify-content: flex-start;
-    align-items: center;
+    flex-direction: column;
+    padding: 0 20px;
+    box-sizing: border-box;
+    input {
+
+    }
   }
-  .volunteer-form-column-40 {
-    width: 40%;
-    float: left;
+  .volunteer-form-column-45 {
+    width: 45%;
+    position: relative;
+    height: 250px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    .profile-image-wrapper {
+      height: 150px;
+      width: 150px;
+      border-radius: 50%;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    button {
+      margin-top: 10px;
+      margin-bottom: -20px;
+    }
   }
   .volunteer-form-column-100 {
     width: 100%;
-    float: left;
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
+    align-self: center;
+    height: 200px;
+    textarea {
+      background-color: white;
+      width: 93%;
+      height: 100%;
+      font-size: 1rem;
+      border-radius: 2px;
+      border: 1px solid #888;
+      &::-webkit-input-placeholder {
+        padding: 8px;
+      }
+    }
   }
 }
-//
-// <div className="volunteer-form-row">
-//   <div className="volunteer-form-column-60">
-//
-//   </div>
-//   <div className="volunteer-form-column-40">
-//
-//   </div>
-// </div>
-// <div className="volunteer-form-row">
-//   <div className="volunteer-form-column-100">
-//
-//   </div>
+
+input {
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid #888;
+  border-radius: 0;
+  outline: none;
+  height: 3rem;
+  width: 100%;
+  font-size: 1rem;
+  padding: 0;
+  box-shadow: none;
+  transition: all .3s;
+  &:focus {
+    border-bottom: 1px solid green;
+    box-shadow: 0 1px 0 0 green;
+  }
+}
+
+.close-modal-x {
+  position: absolute;
+  font-size: 1.5em;
+  top: 5px;
+  right: 0px;
+  cursor: pointer;
+  transition: all 0.1s ease;
+  &:hover {
+    color: #888;
+  }
+}
+
+.button, .button-flat {
+  border: none;
+  border-radius: 2px;
+  display: inline-block;
+  outline: 0;
+  padding: 1rem 1.5rem;
+  text-transform: uppercase;
+  vertical-align: middle;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.button {
+  text-decoration:none;
+  color: white;
+  background-color: blue;
+  text-align: center;
+  letter-spacing: .5px;
+  transition: all 0.2 ease;
+  cursor: pointer;
+  &:hover {
+    background-color: lighten(blue, 5%);
+    box-shadow: 3px 3px 3px 0px #888;
+  }
+}
+
+.button-flat {
+  box-shadow: none;
+  background-color: transparent;
+  color: $default-text-color;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  &:hover {
+    color: white;
+    background-color: $default-text-color;
+  }
+}
