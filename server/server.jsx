@@ -33,3 +33,36 @@ Meteor.startup(function() {
     });
   }
 })
+
+var featureArray = [];
+convertToGeoJSON = function() {
+  _.each(VoterData.find().fetch(), function(voter) {
+    featureArray.push({
+      type: "Feature",
+      geometry: {
+        type: "Point",
+        coordinates: [+voter.long, +voter.lat]
+      },
+      properties: {
+        rec_id: voter.rec_id,
+        first_name: voter.first_name,
+        last_name: voter.last_name,
+        birthday: new Date(voter.birthday).getTime(),
+        gender: voter.gender,
+        city: voter.city,
+        zip: +voter.zip,
+        address: voter.address,
+        party: +voter.party,
+        history: (parseFloat(voter.history)/100),
+        precinct_name: voter.precinct_name
+      }
+    })
+  })
+}
+convertToGeoJSON()
+if (VoterDataGeoJSON.find().count() === 0) {
+  VoterDataGeoJSON.insert({
+    "type": "FeatureCollection",
+    "features": featureArray
+  })
+}
