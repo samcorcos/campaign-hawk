@@ -59,10 +59,15 @@ convertToGeoJSON = function() {
     })
   })
 }
-convertToGeoJSON()
+
 if (VoterDataGeoJSON.find().count() === 0) {
+  convertToGeoJSON()
   VoterDataGeoJSON.insert({
     "type": "FeatureCollection",
     "features": featureArray
   })
 }
+
+Meteor.publish('geojson', function() {
+  return VoterDataGeoJSON.find();
+})

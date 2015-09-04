@@ -9,35 +9,59 @@ Tracker.autorun(function () {
 	}
 });
 
+MapChild = React.createClass({
+  render() {
+
+    console.log(this.props.loading);
+    return (
+      <div>
+        <Sidenav showModal={this.props.showModal} />
+        <div className="content-wrapper">
+          <Modal
+            showModalState={this.props.showModalState}
+            hideModal={this.props.hideModal} />
+          <div id="map" className="mapbox"></div>
+        </div>
+      </div>
+    )
+  }
+})
+
 Map = React.createClass({
   getInitialState() {
     return {
-      showModal: false
+      showModalState: false
     }
   },
   // We need to pass in the type of modal we want to show.
   // These are all set in the switch statement in our Modal component.
   showModal(modalType) {
     this.setState({
-      showModal: modalType
+      showModalState: modalType
     })
   },
   hideModal(e) {
     this.setState({
-      showModal: false
+      showModalState: false
     })
   },
   render() {
     return (
-      <div>
-        <Sidenav showModal={this.showModal} />
-        <div className="content-wrapper">
-          <Modal
-            showModal={this.state.showModal}
-            hideModal={this.hideModal} />
-          <div id="map" className="mapbox"></div>
-        </div>
-      </div>
+      <MeteorData
+        subscribe = { () => {
+          return Meteor.subscribe('geojson') }}
+        fetch = { () => {
+          return {data: VoterDataGeoJSON.find().fetch() } }}
+        render = { ({loading, data}) => {
+          return <MapChild
+            showModalState={this.state.showModalState}
+            hideModal={this.hideModal}
+            showModal={this.showModal}
+            loading={loading}
+            data={data}
+          /> }
+        }
+      />
     )
   }
 })
