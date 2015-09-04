@@ -5,14 +5,16 @@ Meteor.startup(function() {
 Tracker.autorun(function () {
 	if (Mapbox.loaded()) {
 		L.mapbox.accessToken = Meteor.settings.public.mapbox.accessToken;
-		var map = L.mapbox.map("map", Meteor.settings.public.mapbox.mapId);
+		map = L.mapbox.map("map", Meteor.settings.public.mapbox.mapId);
 	}
 });
 
 MapChild = React.createClass({
   render() {
-
-    console.log(this.props.loading);
+    if (!this.props.loading) {
+      var voterLayer = L.mapbox.featureLayer().addTo(map);
+      voterLayer.setGeoJSON(this.props.data);
+    }
     return (
       <div>
         <Sidenav showModal={this.props.showModal} />
