@@ -11,9 +11,7 @@ Sidenav = React.createClass({
     }
   },
   showTooltip(e) {
-    if (this.state.showPopoutState) {
-      return null;
-    }
+    if (this.state.showPopoutState) { return null; }
     this.setState({
       showTooltipState: true,
       tooltipY: e.nativeEvent.target.offsetTop + (e.nativeEvent.target.offsetHeight / 2) + "px"
@@ -57,6 +55,7 @@ Sidenav = React.createClass({
           tooltipY={this.state.tooltipY}/>
         <ul className="sidenav-list">
           <SidenavIcons
+            toggleDataLayer={this.props.toggleDataLayer}
             showPopoutState={this.state.showPopoutState}
             showPopout={this.showPopout}
             hidePopout={this.hidePopout}
@@ -91,24 +90,6 @@ SidenavIcons = React.createClass({
       {name: "fa fa-line-chart", description: "Fancy Charts"},
       {name: "fa fa-cog", description: "Settings"}
     ]
-    var dataLayerInputs = (
-      <div className='popout-content'>
-        <ul>
-          <li>
-            <input type='radio' name='data-layer-group' id='no-data' defaultChecked="checked" />
-            <label htmlFor='no-data'>No Data</label>
-          </li>
-          <li>
-            <input type='radio' name='data-layer-group' id='voter-data2' />
-            <label htmlFor='voter-data2'>Voter Data 2</label>
-          </li>
-          <li>
-            <input type='radio' name='data-layer-group' id='voter-data3' />
-            <label htmlFor='voter-data3'>Voter Data 3</label>
-          </li>
-        </ul>
-      </div>
-    )
     let list = iconList.map((item) => {
       return (
         <li key={item.name}
@@ -118,7 +99,7 @@ SidenavIcons = React.createClass({
               case "View Volunteers": return this.props.showModal.bind(null, item.description);
               case "View as List": return this.props.showModal.bind(null, item.description);
               case "Leaderboard": return this.props.showModal.bind(null, item.description);
-              case "Data Layers": return this.handlePopoutClick.bind(null, dataLayerInputs);
+              case "Data Layers": return this.handlePopoutClick.bind(null, <DataLayerPopoutContent toggleDataLayer={this.props.toggleDataLayer} />);
               default: return null;
             }
           })()}

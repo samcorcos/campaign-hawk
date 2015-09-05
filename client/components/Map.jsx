@@ -10,6 +10,16 @@ Tracker.autorun(function () {
 });
 
 MapChild = React.createClass({
+  toggleDataLayer(layerName) {
+    if (!this.props.loading) {
+      console.log(layerName);
+    } else {
+      alert("Not ready. Retrying in 3 seconds."); // What we eventually want is a loading spinner
+      setTimeout(() => {
+        this.toggleDataLayer(layerName);
+      }, 3000)
+    }
+  },
   render() {
     if (!this.props.loading) {
       // var voterLayer = L.mapbox.featureLayer().addTo(map);
@@ -17,7 +27,9 @@ MapChild = React.createClass({
     }
     return (
       <div>
-        <Sidenav showModal={this.props.showModal} />
+        <Sidenav
+          toggleDataLayer={this.toggleDataLayer}
+          showModal={this.props.showModal} />
         <div className="content-wrapper">
           <Modal
             showModalState={this.props.showModalState}

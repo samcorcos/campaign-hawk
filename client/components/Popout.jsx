@@ -19,3 +19,29 @@ Popout = React.createClass({
     )
   }
 })
+
+DataLayerPopoutContent = React.createClass({
+  handleDataLayerChange(e) {
+    this.props.toggleDataLayer(e.target.id)
+  },
+  render() {
+    return (
+      <div className='popout-content'>
+        <ul>
+          <li>
+            <input onChange={this.handleDataLayerChange} type='radio' name='data-layer-group' id='no-data' defaultChecked="checked" />
+            <label htmlFor='no-data'>No Data</label>
+          </li>
+          <li>
+            <input onChange={this.handleDataLayerChange} type='radio' name='data-layer-group' id='voter-data2' />
+            <label htmlFor='voter-data2'>Voter Data 2</label>
+          </li>
+          <li>
+            <input onChange={this.handleDataLayerChange} type='radio' name='data-layer-group' id='voter-data3' />
+            <label htmlFor='voter-data3'>Voter Data 3</label>
+          </li>
+        </ul>
+      </div>
+    )
+  }
+})
