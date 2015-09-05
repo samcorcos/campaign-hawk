@@ -4,7 +4,7 @@ Popout = React.createClass({
       top: this.props.popoutY,
       left: "50px"
     }
-    if (this.props.showPopout) {
+    if (this.props.showPopoutState) {
       popoutStyle.opacity = "1";
       popoutStyle.visibility = "visible";
     } else {
@@ -13,8 +13,7 @@ Popout = React.createClass({
     }
     return (
       <div className="popout-container" style={popoutStyle}>
-        <h1>this is a popout</h1>
-        <p>{this.props.popoutDescription}</p>
+        <div>{this.props.popoutContent}</div>
         <div className="tail"></div>
       </div>
     )

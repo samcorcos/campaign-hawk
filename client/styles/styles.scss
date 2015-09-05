@@ -47,6 +47,12 @@ body, p, h1, h2, h3, h4, ul, li {
   display: flex;
   align-items: center;
   transform: translateY(-50%);
+    .popout-content {
+      padding: 10px 15px;
+      ul {
+        list-style-type: none;
+      }
+    }
     p {
       color: $default-text-color;
       white-space: nowrap;
@@ -234,4 +240,51 @@ input {
   bottom: 0;
   z-index: 0;
   width: calc(100% - 60px);
+}
+
+/* Remove default Radio Buttons */
+[type="radio"]:not(:checked),
+[type="radio"]:checked {
+  display: none;
+}
+//
+// [type="radio"]:not(:checked),
+// [type="radio"]:checked {
+//   position: absolute;
+//   left: -100%;
+//   visibility: hidden;
+// }
+
+[type="radio"] + label {
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 3px 0 0 35px;
+  line-height: 25px;
+}
+
+[type="radio"] + label:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  margin: 4px;
+  width: 16px;
+  height: 16px;
+  transition: all 0.3s ease;
+}
+
+[type="radio"]:not(:checked) + label:before {
+  border-radius: 50%;
+  border: 2px solid #888;
+}
+
+[type="radio"]:checked + label:before {
+  border-radius: 50%;
+  border: 2px solid $default-text-color;
+  background-color: $default-text-color;
+}
+
+label {
+  white-space: nowrap;
 }

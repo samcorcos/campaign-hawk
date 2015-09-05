@@ -4,7 +4,7 @@ SidenavTooltip = React.createClass({
       top: this.props.tooltipY,
       left: this.props.tooltipX
     }
-    if (this.props.showTooltip) {
+    if (this.props.showTooltipState) {
       tooltipStyle.opacity = "1";
       tooltipStyle.visibility = "visible";
     } else {
