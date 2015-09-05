@@ -11,6 +11,9 @@ Sidenav = React.createClass({
     }
   },
   showTooltip(e) {
+    if (this.state.showPopoutState) {
+      return null;
+    }
     this.setState({
       showTooltipState: true,
       tooltipY: e.nativeEvent.target.offsetTop + (e.nativeEvent.target.offsetHeight / 2) + "px"
