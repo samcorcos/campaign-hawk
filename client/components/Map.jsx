@@ -20,10 +20,48 @@ Tracker.autorun(function () {
 MapChild = React.createClass({
   toggleDataLayer(layerName) {
     if (!this.props.loading) {
-      let clusterGroup = new L.MarkerClusterGroup();
-      let datalayer = L.mapbox.featureLayer().setGeoJSON(this.props.data)
-      clusterGroup.addLayer(datalayer)
-      map.addLayer(clusterGroup)
+      let precinctDataLayer = function() {
+        // get all the features
+        let allDataFeatures = VoterDataGeoJSON.find().fetch()[0].features;
+        // need unique points. husbands and wives will have the same address and it will break turf.concave
+        var stringOfCoords = new Set();
+        let uniqueDataFeatures = _.filter(allDataFeatures, function(feature) {
+          // if the string is not present in the array, return it and push the string to the stringOfCoords
+          if (!stringOfCoords.has(feature.geometry.coordinates.toString())) {
+            stringOfCoords.add(feature.geometry.coordinates.toString())
+            return feature
+          }
+        })
+        // index by precinct
+        let groupByPrecinct = _.groupBy(uniqueDataFeatures, (feature) => { return feature.properties.precinct_name; })
+        // get keys
+        let precinctKeys = _.keys(groupByPrecinct);
+        // create
+        let precinctFeatureCollections = [];
+        _.each(precinctKeys, (key) => {
+          precinctFeatureCollections.push(turf.featurecollection(groupByPrecinct[key]))
+        })
+        // for each feature collection, create a new concave shape
+        let precinctConcaveHulls = [];
+        // _.each(precinctFeatureCollections, (precinct) => {
+        //   precinctConcaveHulls.push(turf.concave(precinct, 5, 'miles'))
+        // })
+        // console.log(precinctFeatureCollections[4]);
+        // console.log(turf.concave(precinctFeatureCollections[4], 1, 'miles'));
+        // console.log(precinctConcaveHulls);
+        VoterDataGeoJSON.insert(precinctFeatureCollections[4])
+
+        // var hull = turf.concave(map.featureLayer.getGeoJSON(), 3, 'miles');
+        // L.mapbox.featureLayer(hull).addTo(map);
+      }
+      precinctDataLayer()
+
+      let allDataLayer = function() {
+        let clusterGroup = new L.MarkerClusterGroup();
+        let datalayer = L.mapbox.featureLayer().setGeoJSON(this.props.data)
+        clusterGroup.addLayer(datalayer)
+        map.addLayer(clusterGroup)
+      }
     } else {
       alert("Not ready. Retrying in 3 seconds."); // What we eventually want is a loading spinner
       setTimeout(() => {
