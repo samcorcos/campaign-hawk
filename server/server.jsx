@@ -53,7 +53,7 @@ convertToGeoJSON = function() {
         zip: +voter.zip,
         address: voter.address,
         party: +voter.party,
-        history: (parseFloat(voter.history)/100),
+        history: (parseFloat(voter.history)/100 || 0),
         precinct_name: voter.precinct_name
       }
     })

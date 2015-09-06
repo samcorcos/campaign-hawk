@@ -49,7 +49,7 @@ MapChild = React.createClass({
         // console.log(precinctFeatureCollections[4]);
         // console.log(turf.concave(precinctFeatureCollections[4], 1, 'miles'));
         // console.log(precinctConcaveHulls);
-        VoterDataGeoJSON.insert(precinctFeatureCollections[4])
+        // VoterDataGeoJSON.insert(precinctFeatureCollections[4])
 
         // var hull = turf.concave(map.featureLayer.getGeoJSON(), 3, 'miles');
         // L.mapbox.featureLayer(hull).addTo(map);
