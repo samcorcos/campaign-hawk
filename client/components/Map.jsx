@@ -1,18 +1,29 @@
 Meteor.startup(function() {
-  Mapbox.load();
+  Mapbox.load({
+    plugins: [
+      "turf",
+      "markercluster",
+      "omnivore"
+    ]
+  });
 });
 
 Tracker.autorun(function () {
-	if (Mapbox.loaded()) {
+  let handle = Meteor.subscribe('geojson');
+	if (Mapbox.loaded() && handle.ready()) {
+    // let x = turf.center(VoterDataGeoJSON.find().fetch()[0]).geometry.coordinates
 		L.mapbox.accessToken = Meteor.settings.public.mapbox.accessToken;
-		map = L.mapbox.map("map", Meteor.settings.public.mapbox.mapId);
+		map = L.mapbox.map("map", Meteor.settings.public.mapbox.mapId) //.setView([47.736534, -121.956672], 14) // reset this
 	}
 });
 
 MapChild = React.createClass({
   toggleDataLayer(layerName) {
     if (!this.props.loading) {
-      console.log(layerName);
+      let clusterGroup = new L.MarkerClusterGroup();
+      let datalayer = L.mapbox.featureLayer().setGeoJSON(this.props.data)
+      clusterGroup.addLayer(datalayer)
+      map.addLayer(clusterGroup)
     } else {
       alert("Not ready. Retrying in 3 seconds."); // What we eventually want is a loading spinner
       setTimeout(() => {
