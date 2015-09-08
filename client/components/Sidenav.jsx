@@ -28,7 +28,6 @@ Sidenav = React.createClass({
     })
   },
   showPopout(item, e) {
-    // e.target.removeEventListener('mouseover', e, false);
     this.setState({
       showPopoutState: true,
       showTooltipState: false,

@@ -20,6 +20,14 @@ Tracker.autorun(function () {
 MapChild = React.createClass({
   toggleDataLayer(layerName) {
     if (!this.props.loading) {
+      let filterVoterDataLayer = function() {
+        let clusterGroup = new L.MarkerClusterGroup();
+        let datalayer = L.mapbox.featureLayer().setGeoJSON(this.props.data)
+        clusterGroup.addLayer(datalayer)
+        map.addLayer(clusterGroup)
+      }
+      filterVoterDataLayer()
+
       let precinctDataLayer = function() {
         let allDataFeatures = VoterDataGeoJSON.find().fetch()[0].features;
         var stringOfCoords = new Set();
@@ -36,11 +44,41 @@ MapChild = React.createClass({
           precinctFeatureCollections.push(turf.featurecollection(groupByPrecinct[key]))
         })
         let precinctConcaveHulls = [];
+        let averagePartyAffiliation = [];
         _.each(precinctFeatureCollections, (precinct) => {
+          let justProperties = _.pluck(precinct.features, "properties")
+          let justParty = _.pluck(justProperties, "party")
+          let partyAffiliationArray = _.without(justParty, 0, 6);
+          averagePartyAffiliation.push(d3.mean(partyAffiliationArray));
           precinctConcaveHulls.push(turf.convex(precinct, 0.1, 'miles'))
         })
-        // console.log(precinctFeatureCollections[4]);
-        let precinctFeatureLayer = L.mapbox.featureLayer(precinctConcaveHulls);
+
+        var scale = d3.scale.linear()
+          .domain([d3.min(averagePartyAffiliation), d3.max(averagePartyAffiliation)])
+          .range([1, 5]);
+
+        let scaledPartyAffiliationArray = _.map(averagePartyAffiliation, scale)
+
+        var colorScale = d3.scale.linear()
+          .domain([1, 3, 5])
+          .range(["blue", "gray", "red"])
+
+        let scaledColorArray = _.map(scaledPartyAffiliationArray, colorScale)
+
+        let scaledPrecinctConcaveHulls = _.map(precinctConcaveHulls, function(polygonFeatureGroup, i) {
+          let propertiesObject = {
+            title: precinctKeys[i],
+            stroke: scaledColorArray[i],
+            "stroke-opacity": 0.7,
+            "stroke-width": 2,
+            fill: scaledColorArray[i],
+            "fill-opacity": 0.3
+          };
+          polygonFeatureGroup.properties = propertiesObject
+          return polygonFeatureGroup
+        })
+        // console.log(precinctFeatureCollections[4]); // This is the one that breaks everything
+        let precinctFeatureLayer = L.mapbox.featureLayer(scaledPrecinctConcaveHulls);
         map.addLayer(precinctFeatureLayer);
       }
 
