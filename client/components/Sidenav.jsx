@@ -54,6 +54,7 @@ Sidenav = React.createClass({
           tooltipY={this.state.tooltipY}/>
         <ul className="sidenav-list">
           <SidenavIcons
+            refreshVoterFilterLayer={this.props.refreshVoterFilterLayer}
             toggleDataLayer={this.props.toggleDataLayer}
             showPopoutState={this.state.showPopoutState}
             showPopout={this.showPopout}
@@ -98,7 +99,9 @@ SidenavIcons = React.createClass({
               case "View Volunteers": return this.props.showModal.bind(null, item.description);
               case "View as List": return this.props.showModal.bind(null, item.description);
               case "Leaderboard": return this.props.showModal.bind(null, item.description);
-              case "Data Layers": return this.handlePopoutClick.bind(null, <DataLayerPopoutContent toggleDataLayer={this.props.toggleDataLayer} />);
+              case "Data Layers": return this.handlePopoutClick.bind(null, <DataLayerPopoutContent
+                                                                              toggleDataLayer={this.props.toggleDataLayer}
+                                                                              refreshVoterFilterLayer={this.props.refreshVoterFilterLayer}/>);
               default: return null;
             }
           })()}

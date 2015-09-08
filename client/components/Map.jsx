@@ -18,6 +18,10 @@ Tracker.autorun(function () {
 });
 
 MapChild = React.createClass({
+  refreshVoterFilterLayer(value) {
+    console.log(value);
+    // this.toggleDataLayer()
+  },
   toggleDataLayer(layerName) {
     if (!this.props.loading) {
       let filterVoterDataLayer = function() {
@@ -103,6 +107,7 @@ MapChild = React.createClass({
     return (
       <div>
         <Sidenav
+          refreshVoterFilterLayer={this.refreshVoterFilterLayer}
           toggleDataLayer={this.toggleDataLayer}
           showModal={this.props.showModal} />
         <div className="content-wrapper">

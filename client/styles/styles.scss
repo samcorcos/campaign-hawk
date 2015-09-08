@@ -51,6 +51,11 @@ body, p, h1, h2, h3, h4, ul, li {
       padding: 10px 15px;
       ul {
         list-style-type: none;
+        li {
+          .filter-voter-range {
+            white-space:nowrap;
+          }
+        }
       }
     }
     p {
@@ -166,7 +171,7 @@ body, p, h1, h2, h3, h4, ul, li {
   }
 }
 
-input {
+[type="text"], [type="email"], [type="phone"] {
   background-color: transparent;
   border: none;
   border-bottom: 1px solid #888;

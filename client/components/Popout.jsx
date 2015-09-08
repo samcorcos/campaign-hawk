@@ -21,10 +21,23 @@ Popout = React.createClass({
 })
 
 DataLayerPopoutContent = React.createClass({
+  getInitialState() {
+    return {
+      voterSliderValue: 0
+    }
+  },
   handleDataLayerChange(e) {
     this.props.toggleDataLayer(e.target.id)
   },
+  handleVoterSliderChange(e) {
+    this.props.refreshVoterFilterLayer(e.target.value)
+  },
   render() {
+    let filterRange = (
+      <div className="filter-voter-range">
+        <span>0%</span><input type="range" onChange={this.handleVoterSliderChange} defaultValue={this.state.voterSliderValue}/><span>100%</span>
+      </div>
+    )
     return (
       <div className='popout-content'>
         <ul>
@@ -38,7 +51,8 @@ DataLayerPopoutContent = React.createClass({
           </li>
           <li>
             <input onChange={this.handleDataLayerChange} type='radio' name='data-layer-group' id='filter-non-voters' />
-            <label htmlFor='voter-data3'>Filter Non-Voters</label>
+            <label htmlFor='filter-non-voters'>Filter Non-Voters</label>
+            {filterRange}
           </li>
         </ul>
       </div>
