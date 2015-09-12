@@ -17,6 +17,7 @@ Tracker.autorun(function () {
 
     allVotersLayer = createAllVotersLayer()
     precinctLayer = createPrecinctLayer()
+    filteredVoterLayer = createFilteredVoterLayer(value=0)
   }
 });
 
@@ -80,31 +81,35 @@ let createAllVotersLayer = () => {
   return clusterGroup.addLayer(dataLayer)
 }
 
+let createFilteredVoterLayer = (value) => {
+  let votingPercentage = value / 100;
+  let filteredVoters = _.filter(VoterDataGeoJSON.find().fetch()[0].features, function(feature) {
+    return feature.properties.history > votingPercentage
+  })
+  let clusterGroup = new L.MarkerClusterGroup();
+  let dataLayer = L.mapbox.featureLayer().setGeoJSON(filteredVoters)
+  if (typeof filteredVoterLayer !== "undefined") {
+    return filteredVoterLayer = clusterGroup.addLayer(dataLayer)
+  }
+  return clusterGroup.addLayer(dataLayer)
+}
+
 
 MapChild = React.createClass({
   refreshVoterFilterLayer(value) {
-    this.toggleDataLayer("filter-non-voters", value)
-    // http://stackoverflow.com/questions/1171582/how-do-i-make-my-live-jquery-search-wait-a-second-before-performing-the-search
+    if (map.hasLayer(filteredVoterLayer)) {
+      map.removeLayer(filteredVoterLayer)
+    }
+    createFilteredVoterLayer(value)
+    map.addLayer(filteredVoterLayer)
   },
-  toggleDataLayer(layerName, value) {
+  toggleDataLayer(layerName) {
     if (!this.props.loading) {
-      let filterVoterDataLayer = (value) => {
-        let votingPercentage = value / 100;
-        let filteredVoters = _.filter(this.props.data[0].features, function(feature) {
-          return feature.properties.history > votingPercentage
-        })
-        // let filteredValue =
-        let clusterGroup = new L.MarkerClusterGroup();
-        let dataLayer = L.mapbox.featureLayer().setGeoJSON(filteredVoters)
-        clusterGroup.addLayer(dataLayer)
-
-        map.addLayer(clusterGroup)
-      }
-      // filterVoterDataLayer(value=0)
 
       let allLayers = [
         allVotersLayer,
-        precinctLayer
+        precinctLayer,
+        filteredVoterLayer
       ]
 
       _.each(allLayers, function(layer) {
@@ -119,6 +124,9 @@ MapChild = React.createClass({
       if (layerName === "precinct-layer") {
         map.addLayer(precinctLayer)
       }
+      if (layerName === "filter-non-voters") {
+        map.addLayer(filteredVoterLayer)
+      }
 
     } else {
       alert("Not ready. Retrying in 3 seconds."); // What we eventually want is a loading spinner
@@ -129,8 +137,7 @@ MapChild = React.createClass({
   },
   render() {
     if (!this.props.loading) {
-      // var voterLayer = L.mapbox.featureLayer().addTo(map);
-      // voterLayer.setGeoJSON(this.props.data);
+
     }
     return (
       <div>
