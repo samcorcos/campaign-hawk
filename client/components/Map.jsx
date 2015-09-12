@@ -14,8 +14,72 @@ Tracker.autorun(function () {
     // let x = turf.center(VoterDataGeoJSON.find().fetch()[0]).geometry.coordinates
 		L.mapbox.accessToken = Meteor.settings.public.mapbox.accessToken;
 		map = L.mapbox.map("map", Meteor.settings.public.mapbox.mapId) //.setView([47.736534, -121.956672], 14) // reset this
-	}
+
+    allVotersLayer = createAllVotersLayer()
+    precinctLayer = createPrecinctLayer()
+  }
 });
+
+let createPrecinctLayer = function() {
+  let allDataFeatures = VoterDataGeoJSON.find().fetch()[0].features;
+  var stringOfCoords = new Set();
+  let uniqueDataFeatures = _.filter(allDataFeatures, function(feature) {
+    if (!stringOfCoords.has(feature.geometry.coordinates.toString()) && feature.geometry.coordinates.toString() != "0,0") {
+      stringOfCoords.add(feature.geometry.coordinates.toString())
+      return feature
+    }
+  })
+  let groupByPrecinct = _.groupBy(uniqueDataFeatures, (feature) => { return feature.properties.precinct_name; })
+  let precinctKeys = _.keys(groupByPrecinct);
+  let precinctFeatureCollections = [];
+  _.each(precinctKeys, (key) => {
+    precinctFeatureCollections.push(turf.featurecollection(groupByPrecinct[key]))
+  })
+  let precinctConcaveHulls = [];
+  let averagePartyAffiliation = [];
+  _.each(precinctFeatureCollections, (precinct) => {
+    let justProperties = _.pluck(precinct.features, "properties")
+    let justParty = _.pluck(justProperties, "party")
+    let partyAffiliationArray = _.without(justParty, 0, 6);
+    averagePartyAffiliation.push(d3.mean(partyAffiliationArray));
+    precinctConcaveHulls.push(turf.convex(precinct, 0.1, 'miles'))
+  })
+
+  var scale = d3.scale.linear()
+    .domain([d3.min(averagePartyAffiliation), d3.max(averagePartyAffiliation)])
+    .range([1, 5]);
+
+  let scaledPartyAffiliationArray = _.map(averagePartyAffiliation, scale)
+
+  var colorScale = d3.scale.linear()
+    .domain([1, 3, 5])
+    .range(["blue", "gray", "red"])
+
+  let scaledColorArray = _.map(scaledPartyAffiliationArray, colorScale)
+
+  let scaledPrecinctConcaveHulls = _.map(precinctConcaveHulls, function(polygonFeatureGroup, i) {
+    let propertiesObject = {
+      title: precinctKeys[i],
+      stroke: scaledColorArray[i],
+      "stroke-opacity": 0.7,
+      "stroke-width": 2,
+      fill: scaledColorArray[i],
+      "fill-opacity": 0.3
+    };
+    polygonFeatureGroup.properties = propertiesObject
+    return polygonFeatureGroup
+  })
+  // console.log(precinctFeatureCollections[4]); // This is the one that breaks everything
+  return L.mapbox.featureLayer(scaledPrecinctConcaveHulls);
+  // map.addLayer(precinctFeatureLayer);
+}
+
+let createAllVotersLayer = () => {
+  let clusterGroup = new L.MarkerClusterGroup();
+  let dataLayer = L.mapbox.featureLayer().setGeoJSON(VoterDataGeoJSON.find().fetch())
+  return clusterGroup.addLayer(dataLayer)
+}
+
 
 MapChild = React.createClass({
   refreshVoterFilterLayer(value) {
@@ -31,105 +95,31 @@ MapChild = React.createClass({
         })
         // let filteredValue =
         let clusterGroup = new L.MarkerClusterGroup();
-        let datalayer = L.mapbox.featureLayer().setGeoJSON(filteredVoters)
-        clusterGroup.addLayer(datalayer)
+        let dataLayer = L.mapbox.featureLayer().setGeoJSON(filteredVoters)
+        clusterGroup.addLayer(dataLayer)
 
+        map.addLayer(clusterGroup)
+      }
+      // filterVoterDataLayer(value=0)
 
-        // function addLayer(layer, name, zIndex) {
-        //     layer
-        //         .setZIndex(zIndex)
-        //         .addTo(map);
-        //
-        //     // Create a simple layer switcher that
-        //     // toggles layers on and off.
-        //     var link = document.createElement('a');
-        //         link.href = '#';
-        //         link.className = 'active';
-        //         link.innerHTML = name;
-        //
-        //     link.onclick = function(e) {
-        //         e.preventDefault();
-        //         e.stopPropagation();
-        //
-        //         if (map.hasLayer(layer)) {
-        //             map.removeLayer(layer);
-        //             this.className = '';
-        //         } else {
-        //             map.addLayer(layer);
-        //             this.className = 'active';
-        //         }
-        //     };
-        
-        if (map.hasLayer(clusterGroup._leaflet)) {
-          console.log("has layer");
-        } else {
-          console.log("does not have layer");
+      let allLayers = [
+        allVotersLayer,
+        precinctLayer
+      ]
+
+      _.each(allLayers, function(layer) {
+        if (map.hasLayer(layer)) {
+          map.removeLayer(layer)
         }
-        console.log(clusterGroup);
-        map.addLayer(clusterGroup)
+      })
+
+      if (layerName === "all-voters-layer") {
+        map.addLayer(allVotersLayer)
       }
-      filterVoterDataLayer(value=0)
-
-      let precinctDataLayer = function() {
-        let allDataFeatures = VoterDataGeoJSON.find().fetch()[0].features;
-        var stringOfCoords = new Set();
-        let uniqueDataFeatures = _.filter(allDataFeatures, function(feature) {
-          if (!stringOfCoords.has(feature.geometry.coordinates.toString()) && feature.geometry.coordinates.toString() != "0,0") {
-            stringOfCoords.add(feature.geometry.coordinates.toString())
-            return feature
-          }
-        })
-        let groupByPrecinct = _.groupBy(uniqueDataFeatures, (feature) => { return feature.properties.precinct_name; })
-        let precinctKeys = _.keys(groupByPrecinct);
-        let precinctFeatureCollections = [];
-        _.each(precinctKeys, (key) => {
-          precinctFeatureCollections.push(turf.featurecollection(groupByPrecinct[key]))
-        })
-        let precinctConcaveHulls = [];
-        let averagePartyAffiliation = [];
-        _.each(precinctFeatureCollections, (precinct) => {
-          let justProperties = _.pluck(precinct.features, "properties")
-          let justParty = _.pluck(justProperties, "party")
-          let partyAffiliationArray = _.without(justParty, 0, 6);
-          averagePartyAffiliation.push(d3.mean(partyAffiliationArray));
-          precinctConcaveHulls.push(turf.convex(precinct, 0.1, 'miles'))
-        })
-
-        var scale = d3.scale.linear()
-          .domain([d3.min(averagePartyAffiliation), d3.max(averagePartyAffiliation)])
-          .range([1, 5]);
-
-        let scaledPartyAffiliationArray = _.map(averagePartyAffiliation, scale)
-
-        var colorScale = d3.scale.linear()
-          .domain([1, 3, 5])
-          .range(["blue", "gray", "red"])
-
-        let scaledColorArray = _.map(scaledPartyAffiliationArray, colorScale)
-
-        let scaledPrecinctConcaveHulls = _.map(precinctConcaveHulls, function(polygonFeatureGroup, i) {
-          let propertiesObject = {
-            title: precinctKeys[i],
-            stroke: scaledColorArray[i],
-            "stroke-opacity": 0.7,
-            "stroke-width": 2,
-            fill: scaledColorArray[i],
-            "fill-opacity": 0.3
-          };
-          polygonFeatureGroup.properties = propertiesObject
-          return polygonFeatureGroup
-        })
-        // console.log(precinctFeatureCollections[4]); // This is the one that breaks everything
-        let precinctFeatureLayer = L.mapbox.featureLayer(scaledPrecinctConcaveHulls);
-        map.addLayer(precinctFeatureLayer);
+      if (layerName === "precinct-layer") {
+        map.addLayer(precinctLayer)
       }
 
-      let allDataLayer = () => {
-        let clusterGroup = new L.MarkerClusterGroup();
-        let datalayer = L.mapbox.featureLayer().setGeoJSON(this.props.data)
-        clusterGroup.addLayer(datalayer)
-        map.addLayer(clusterGroup)
-      }
     } else {
       alert("Not ready. Retrying in 3 seconds."); // What we eventually want is a loading spinner
       setTimeout(() => {
