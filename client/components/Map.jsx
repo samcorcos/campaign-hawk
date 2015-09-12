@@ -19,18 +19,56 @@ Tracker.autorun(function () {
 
 MapChild = React.createClass({
   refreshVoterFilterLayer(value) {
-    console.log(value);
-    // this.toggleDataLayer()
+    this.toggleDataLayer("filter-non-voters", value)
+    // http://stackoverflow.com/questions/1171582/how-do-i-make-my-live-jquery-search-wait-a-second-before-performing-the-search
   },
-  toggleDataLayer(layerName) {
+  toggleDataLayer(layerName, value) {
     if (!this.props.loading) {
-      let filterVoterDataLayer = function() {
+      let filterVoterDataLayer = (value) => {
+        let votingPercentage = value / 100;
+        let filteredVoters = _.filter(this.props.data[0].features, function(feature) {
+          return feature.properties.history > votingPercentage
+        })
+        // let filteredValue =
         let clusterGroup = new L.MarkerClusterGroup();
-        let datalayer = L.mapbox.featureLayer().setGeoJSON(this.props.data)
+        let datalayer = L.mapbox.featureLayer().setGeoJSON(filteredVoters)
         clusterGroup.addLayer(datalayer)
+
+
+        // function addLayer(layer, name, zIndex) {
+        //     layer
+        //         .setZIndex(zIndex)
+        //         .addTo(map);
+        //
+        //     // Create a simple layer switcher that
+        //     // toggles layers on and off.
+        //     var link = document.createElement('a');
+        //         link.href = '#';
+        //         link.className = 'active';
+        //         link.innerHTML = name;
+        //
+        //     link.onclick = function(e) {
+        //         e.preventDefault();
+        //         e.stopPropagation();
+        //
+        //         if (map.hasLayer(layer)) {
+        //             map.removeLayer(layer);
+        //             this.className = '';
+        //         } else {
+        //             map.addLayer(layer);
+        //             this.className = 'active';
+        //         }
+        //     };
+        
+        if (map.hasLayer(clusterGroup._leaflet)) {
+          console.log("has layer");
+        } else {
+          console.log("does not have layer");
+        }
+        console.log(clusterGroup);
         map.addLayer(clusterGroup)
       }
-      filterVoterDataLayer()
+      filterVoterDataLayer(value=0)
 
       let precinctDataLayer = function() {
         let allDataFeatures = VoterDataGeoJSON.find().fetch()[0].features;
@@ -86,7 +124,7 @@ MapChild = React.createClass({
         map.addLayer(precinctFeatureLayer);
       }
 
-      let allDataLayer = function() {
+      let allDataLayer = () => {
         let clusterGroup = new L.MarkerClusterGroup();
         let datalayer = L.mapbox.featureLayer().setGeoJSON(this.props.data)
         clusterGroup.addLayer(datalayer)
