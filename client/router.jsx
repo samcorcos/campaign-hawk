@@ -9,10 +9,11 @@ const {
 Meteor.startup(function() {
   let AppRoutes = (
     <Router history={history}>
-      <Route component={App}>
-        <Router component={Map} path="/" />
-        <Router component={Login} path="login" />
+      <Route component={App} path="/">
+        <Route component={Map} path="map/:code" />
+        <Route component={Login} path="login" />
       </Route>
+      <Redirect from="/" to="/map/:code" />
     </Router>
   )
   React.render(AppRoutes, document.body)

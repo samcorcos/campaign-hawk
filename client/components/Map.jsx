@@ -159,7 +159,8 @@ MapChild = React.createClass({
 Map = React.createClass({
   getInitialState() {
     return {
-      showModalState: false
+      showModalState: false,
+      code: this.props.params.code
     }
   },
   showModal(modalType) {
@@ -173,6 +174,7 @@ Map = React.createClass({
     })
   },
   render() {
+    console.log(this.state.code);
     return (
       <MeteorData
         subscribe = { () => {
