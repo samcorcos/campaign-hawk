@@ -91,7 +91,9 @@ let createAllVotersLayer = () => {
 let createFilteredVoterLayer = (value) => {
   let votingPercentage = value / 100;
   let filteredVoters = _.filter(VoterDataGeoJSON.find().fetch()[0].features, function(feature) {
-    return feature.properties.history > votingPercentage
+    if (feature.geometry.coordinates[0] != 0) {
+      return feature.properties.history > votingPercentage
+    }
   })
   let clusterGroup = new L.MarkerClusterGroup();
   let dataLayer = L.mapbox.featureLayer().setGeoJSON(filteredVoters)
