@@ -77,7 +77,14 @@ let createPrecinctLayer = function() {
 
 let createAllVotersLayer = () => {
   let clusterGroup = new L.MarkerClusterGroup();
-  let dataLayer = L.mapbox.featureLayer().setGeoJSON(VoterDataGeoJSON.find().fetch())
+  let voterDataUnfiltered = VoterDataGeoJSON.find().fetch()[0].features
+  let voterDataFiltered = _.filter(voterDataUnfiltered, function(feature) {
+    if (feature.geometry.coordinates[0] != 0) {
+      return feature;
+    }
+  })
+  let voterDataFeatureCollection = turf.featurecollection(voterDataFiltered)
+  let dataLayer = L.mapbox.featureLayer().setGeoJSON(voterDataFeatureCollection)
   return clusterGroup.addLayer(dataLayer)
 }
 

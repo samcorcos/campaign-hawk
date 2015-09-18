@@ -17,3 +17,6 @@ Meteor.startup(function() {
   )
   React.render(AppRoutes, document.body)
 })
+
+// window.location.search.substring(1).split("=")
+// window.location.search.substring(1).split("=")[1]
